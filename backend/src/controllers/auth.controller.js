@@ -2,25 +2,21 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require('../prisma');
 const redis = require('../config/redis');
+const AppError = require('../utils/AppError');
+const catchAsync = require('../utils/catchAsync');
 
-const register = async (req, res) => {
+const register = catchAsync(async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: 'All fields are required',
-      });
+      throw new AppError("All fields are required",404);
     }
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
     if (existingUser) {
-      return res.status(409).json({
-        success: false,
-        message: 'User already exists',
-      });
+      throw new AppError("User already exists",404);
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -50,16 +46,13 @@ const register = async (req, res) => {
       message: 'Internal server error',
     });
   }
-};
+});
 
-const login = async (req, res) => {
+const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: 'All fields are required',
-    });
+    throw new AppError("All fields are required",404);
   }
 
   const user = await prisma.user.findUnique({
@@ -67,19 +60,13 @@ const login = async (req, res) => {
   });
 
   if (!user) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid email or password',
-    });
+    throw new AppError("Invalid email or password",404);
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid email or password',
-    });
+    throw new AppError("Invalid email or password",404);
   }
 
   const token = jwt.sign(
@@ -96,9 +83,9 @@ const login = async (req, res) => {
     message: 'Login successful',
     token,
   });
-};
+});
 
-const profile = async (req, res) => {
+const profile = catchAsync(async (req, res) => {
   try {
     const redis_cached_user_profile = await redis.get('user_profile');
     if (redis_cached_user_profile) {
@@ -107,6 +94,12 @@ const profile = async (req, res) => {
     const user_profile = await prisma.user.findMany({
       where: {
         id: req.user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
       },
     });
     await redis.set('user_profile', JSON.stringify(user_profile), {
@@ -122,9 +115,9 @@ const profile = async (req, res) => {
       message: err.message,
     });
   }
-};
+});
 
-const logout = async (req, res) => {
+const logout = catchAsync(async (req, res) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
     const expiry =
@@ -145,6 +138,6 @@ const logout = async (req, res) => {
       message: err.message,
     });
   }
-};
+});
 
 module.exports = { register, login, profile, logout };

@@ -6,7 +6,7 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "prepare": "husky",
-    "lint": "eslint ."  
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",

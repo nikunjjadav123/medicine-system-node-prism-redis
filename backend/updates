@@ -1,0 +1,23 @@
+1) Add Jai Validation in Registration / Login
+2) use winston for logging
+3) Error Middleware
+
+Modification after Deployment : set MONGO_LOCAL_URL to MONGO_ATLAS_PRODUCTION_URL
+
+
+===> For Logout
+JWT is stateless
+
+That means:
+
+Server does NOT store JWT
+
+Server only verifies JWT using secret
+
+So once a token is created:
+
+It stays valid until it expires
+
+Server cannot “delete” it normally
+
+=> So we have stored the current token into blacklist

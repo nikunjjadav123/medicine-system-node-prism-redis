@@ -1,2 +1,2 @@
 // test.js
-const x = 10;
+foo();

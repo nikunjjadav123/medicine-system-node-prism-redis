@@ -1,4 +1,8 @@
 const express = require('express');
+const auth = require("../middleware/auth.middleware");
+const validate = require("../middleware/validate");
+const { createMedicineSchema } = require("../validators/medicine.schema");
+
 const {
   createMedicine,
   GetAllMedicines,
@@ -7,8 +11,8 @@ const {
 
 const medicineRoute = express.Router();
 
-medicineRoute.post('/create', createMedicine);
-medicineRoute.delete('/delete/:id', deleteMedicine);
-medicineRoute.get('/all', GetAllMedicines);
+medicineRoute.post('/create',auth,validate(createMedicineSchema), createMedicine);
+medicineRoute.delete('/delete/:id',auth, deleteMedicine);
+medicineRoute.get('/all',auth, GetAllMedicines);
 
 module.exports = medicineRoute;

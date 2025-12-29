@@ -5,3 +5,4 @@ prisma/dev.db
 dist/
 coverage/
 .env.production
+updates

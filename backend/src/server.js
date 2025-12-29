@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const medicineRoute = require('./routes/route.medicine');
 const userRoutes = require('./routes/route.user');
-
+const prisma = require("./prisma");
 const app = express();
 
 const PORT = process.env.PORT || 3000;

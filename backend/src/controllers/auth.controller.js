@@ -1,4 +1,3 @@
-const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require('../prisma');
@@ -115,7 +114,7 @@ const profile = async (req, res) => {
     });
     res.status(200).json({
       success: true,
-      data: user,
+      data: user_profile,
     });
   } catch (err) {
     return res.status(401).json({

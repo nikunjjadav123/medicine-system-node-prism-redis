@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "prepare": "husky install",
-    "format": "prettier --write ."
+    "prepare": "husky",
+    "lint": "eslint ."  
   },
   "keywords": [],
   "author": "",
@@ -23,7 +23,12 @@
     "redis": "^5.10.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/node": "^25.0.3",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
     "nodemon": "^3.1.11"
   }
 }

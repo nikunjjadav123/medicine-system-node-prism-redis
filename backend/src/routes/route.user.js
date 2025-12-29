@@ -7,7 +7,7 @@ const {
   logout,
 } = require('../controllers/auth.controller');
 
-const userRoute=express.Router();
+const userRoute = express.Router();
 
 userRoute.post('/register', register);
 userRoute.post('/login', login);

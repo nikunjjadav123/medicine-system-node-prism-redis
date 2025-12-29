@@ -1,6 +1,7 @@
 1) Add Jai Validation in Registration / Login
 2) use winston for logging
 3) Error Middleware
+4) Install formatting tool ( library )
 
 Modification after Deployment : set MONGO_LOCAL_URL to MONGO_ATLAS_PRODUCTION_URL
 

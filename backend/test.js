@@ -1,2 +1,5 @@
 // test.js
-foo();
+const a = 10;
+console.log(a);
+// abc();
+ 

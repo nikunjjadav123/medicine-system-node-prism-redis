@@ -1,6 +1,4 @@
 // middlewares/restrictTo.js
-const prisma = require("../prisma");
-
 const restrictTo = (...roles) => {
   return async(req, res, next) => {
     if (!roles.includes(req.user.role)) {

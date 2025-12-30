@@ -4,9 +4,9 @@ const express = require('express');
 const cors = require('cors');
 const medicineRoute = require('./routes/route.medicine');
 const userRoutes = require('./routes/route.user');
+const adminRoutes = require('./routes/route.admin');
 const prisma = require("./prisma");
 const errorMiddleware = require("./middleware/error.middleware");
-const rateLimit = require("./middleware/rateLimiter");
 
 const app = express();
 
@@ -15,8 +15,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/api',rateLimit);
+
 app.use('/api', userRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/medicine', medicineRoute);
 
 app.use(errorMiddleware);

@@ -11,7 +11,7 @@ const userRoute = express.Router();
 
 userRoute.post('/register', register);
 userRoute.post('/login', login);
-userRoute.get('/profile', auth, profile);
+userRoute.get('/profile',auth, profile);
 userRoute.post('/logout', auth, logout);
 
 module.exports = userRoute;

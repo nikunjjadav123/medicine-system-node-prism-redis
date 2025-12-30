@@ -7,7 +7,7 @@ const apiLimited = rateLimit({
         sendCommand: (...args) => redis.sendCommand(args),
     }),
     windowMs: 15*60*1000,
-    max:5,
+    max:50,
     message: "Too many requests, try again later",
 });
 

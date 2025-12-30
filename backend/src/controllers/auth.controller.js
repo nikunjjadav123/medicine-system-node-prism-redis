@@ -18,6 +18,9 @@ const register = catchAsync(async (req, res) => {
     if (existingUser) {
       throw new AppError("User already exists",404);
     }
+    const adminExists = await prisma.user.findFirst({
+      where: { role: "ADMIN" }
+    });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -27,6 +30,7 @@ const register = catchAsync(async (req, res) => {
         name,
         email,
         password: hashedPassword,
+        role:adminExists ? undefined : "ADMIN"
       },
     });
 
@@ -73,6 +77,7 @@ const login = catchAsync(async (req, res) => {
     {
       id: user.id,
       email: user.email,
+      role: user.role
     },
     process.env.JWT_SECRET_KEY,
     { expiresIn: process.env.JWT_EXPIRE },

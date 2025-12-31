@@ -22,9 +22,11 @@ app.use('/api/medicine', medicineRoute);
 
 app.use(errorMiddleware);
 
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
 // Graceful shutdown (important for Prisma)
 process.on('SIGINT', async () => {

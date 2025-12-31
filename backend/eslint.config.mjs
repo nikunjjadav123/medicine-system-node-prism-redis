@@ -10,7 +10,15 @@ export default [
         require: "readonly",
         module: "readonly",
         process: "readonly",
-        console: "readonly"
+        console: "readonly",
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        beforeAll: "readonly",
+        afterEach: "readonly",
+        afterAll: "readonly",
+        jest: "readonly",
       }
     },
     rules: {

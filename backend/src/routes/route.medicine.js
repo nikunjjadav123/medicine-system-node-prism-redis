@@ -1,7 +1,7 @@
 const express = require('express');
 const auth = require("../middleware/auth.middleware");
 const validate = require("../middleware/validate");
-const { createMedicineSchema } = require("../validators/medicine.schema");
+const createMedicineSchema = require("../validators/medicine.schema");
 
 const {
   createMedicine,

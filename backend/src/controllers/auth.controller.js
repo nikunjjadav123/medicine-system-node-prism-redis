@@ -64,13 +64,13 @@ const login = catchAsync(async (req, res) => {
   });
 
   if (!user) {
-    throw new AppError("Invalid email or password",404);
+    throw new AppError("Invalid email or password",401);
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    throw new AppError("Invalid email or password",404);
+    throw new AppError("Invalid email or password",401);
   }
 
   const token = jwt.sign(

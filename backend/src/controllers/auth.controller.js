@@ -134,7 +134,8 @@ const updateProfile = catchAsync(async (req, res) => {
   if(email) updateData.email = email;
 
   if (req.file) {
-    updateData.profile_photo = req.file.path; // Store the file path
+    updateData.profile_photo = `uploads/profile/${req.file.filename}`;
+
   }
   if(Object.keys(updateData).length === 0){
     throw new AppError("No data provided for update",404);

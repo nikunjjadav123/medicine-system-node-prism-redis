@@ -11,13 +11,15 @@ const loginSchema = require("../validators/auth.schema");
 const validate = require("../middleware/validate");
 const {createLimiter} = require("../middleware/rateLimiter");
 const upload = require( "../middleware/upload.js");
-
+const path = require("path");
 const userRoute = express.Router();
 
 userRoute.post('/register', register);
 userRoute.post('/login',createLimiter,validate(loginSchema),login);
 userRoute.get('/profile',auth, profile);
 userRoute.post('/logout', auth, logout);
+
+userRoute.use("/uploads", express.static(path.join(__dirname, "uploads")));
 userRoute.put("/edit-profile",auth,upload.single("profile_photo"),updateProfile);
 
 

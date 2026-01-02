@@ -40,6 +40,13 @@ export default function Navbar() {
               >
                 Profile
               </Button>
+              <Button
+                component={Link}
+                to="/settings"
+                color="inherit"
+              >
+                Settings
+              </Button>
             </>
           )}
         </Box>

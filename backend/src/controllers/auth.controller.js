@@ -19,7 +19,7 @@ const register = catchAsync(async (req, res) => {
       throw new AppError("User already exists",404);
     }
     const adminExists = await prisma.user.findFirst({
-      where: { role: "ADMIN" }
+      where: { role: "SUPER_ADMIN" }
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -30,7 +30,7 @@ const register = catchAsync(async (req, res) => {
         name,
         email,
         password: hashedPassword,
-        role:adminExists ? undefined : "ADMIN"
+        role:adminExists ? undefined : "SUPER_ADMIN"
       },
     });
 

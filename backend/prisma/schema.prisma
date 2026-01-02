@@ -21,6 +21,7 @@ model Medicine {
 }
 
 enum Role {
+  SUPER_ADMIN
   ADMIN
   DOCTOR
   PHARMACIST

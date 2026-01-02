@@ -21,20 +21,6 @@ const updateUserRole = catchAsync(async (req, res) => {
     throw new AppError("User not found", 404);
   }
 
-  // Prevent multiple admins
-  if (role === "ADMIN") {
-    const adminExists = await prisma.user.findFirst({
-      where: {
-        role: "ADMIN",
-        NOT: { id: userId }
-      }
-    });
-
-    if (adminExists) {
-      throw new AppError("Admin role already exists", 403);
-    }
-  }
-
   const user = await prisma.user.update({
     where: { id: userId },
     data: { role }

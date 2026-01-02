@@ -6,6 +6,6 @@ const updateUserRole = require("../controllers/admin.controller");
 
 const router = express.Router();
 
-router.patch("/user/:id/role",auth,restrictTo('ADMIN'),updateLimiter,updateUserRole);
+router.patch("/user/:id/role",auth,restrictTo('SUPER_ADMIN'),updateLimiter,updateUserRole);
 
 module.exports = router;

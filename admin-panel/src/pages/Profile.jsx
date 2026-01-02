@@ -9,10 +9,13 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
 
   const fetchProfile = async () => {
     try {
@@ -60,7 +63,7 @@ export default function Profile() {
         <Avatar
           src={
             user.profile_photo
-              ? `http://localhost:5000/${user.profile_photo}`
+              ? `${import.meta.env.VITE_API_URL}${user.profile_photo}`
               : undefined
           }
           sx={{
@@ -95,7 +98,7 @@ export default function Profile() {
             variant="contained"
             fullWidth
             sx={{ mt: 3 }}
-            onClick={() => alert("Edit profile coming soon")}
+            onClick={() => navigate("/edit-profile")}
           >
             Edit Profile
           </Button>

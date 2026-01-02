@@ -91,7 +91,7 @@ export default function Profile() {
             color="text.secondary"
             sx={{ mt: 1, fontWeight: 500 }}
           >
-            {user.role}
+            {user.role.replaceAll("_", " ")}
           </Typography>
 
           <Button

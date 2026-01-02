@@ -92,7 +92,6 @@ const login = catchAsync(async (req, res) => {
 
 const profile = catchAsync(async (req, res) => {
   try {
-    console.log("REQ.USER:", req.user);
 
     const user_profile = await prisma.user.findUnique({
       where: { id: req.user.id },
@@ -125,6 +124,41 @@ const profile = catchAsync(async (req, res) => {
   }
 });
 
+const updateProfile = catchAsync(async (req, res) => {
+  const { name, email } = req.body;
+  const userId = req.user.id;
+  const updateData = {};
+
+  if(name) updateData.name = name;
+
+  if(email) updateData.email = email;
+
+  if (req.file) {
+    updateData.profile_photo = req.file.path; // Store the file path
+  }
+  if(Object.keys(updateData).length === 0){
+    throw new AppError("No data provided for update",404);
+  }
+  
+  const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        profile_photo: true,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: updatedUser,
+    });
+});
+
 const logout = catchAsync(async (req, res) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
@@ -148,4 +182,4 @@ const logout = catchAsync(async (req, res) => {
   }
 });
 
-module.exports = { register, login, profile, logout };
+module.exports = { register, login, profile, logout, updateProfile };

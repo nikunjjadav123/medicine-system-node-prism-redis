@@ -19,6 +19,7 @@ export default [
         afterEach: "readonly",
         afterAll: "readonly",
         jest: "readonly",
+        __dirname: "readonly",
       }
     },
     rules: {

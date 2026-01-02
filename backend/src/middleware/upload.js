@@ -1,19 +1,14 @@
 const multer = require('multer');
-const uuid = require("uuid");  
+const { v4: uuidv4 } = require("uuid"); 
 const path = require('path');
 const AppError = require("../utils/AppError");
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
         cb(null,path.join(__dirname,'../../uploads/profile/'));
     },
     filename:function(req,file,cb){
-        cb(null,uuid() + path.extname(file.originalname));
+        cb(null,uuidv4() + path.extname(file.originalname));
     }
 });
 

@@ -7,7 +7,7 @@ const userRoutes = require('./routes/route.user');
 const adminRoutes = require('./routes/route.admin');
 const prisma = require("./prisma");
 const errorMiddleware = require("./middleware/error.middleware");
-
+const path = require("path");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -19,6 +19,7 @@ app.use(express.json());
 app.use('/api', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/medicine', medicineRoute);
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 app.use(errorMiddleware);
 

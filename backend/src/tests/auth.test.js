@@ -1,6 +1,4 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-
 jest.mock("../prisma");
 jest.mock("../middleware/rateLimiter", () => ({
   createLimiter: (req, res, next) => next(),

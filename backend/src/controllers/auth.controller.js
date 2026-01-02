@@ -92,32 +92,35 @@ const login = catchAsync(async (req, res) => {
 
 const profile = catchAsync(async (req, res) => {
   try {
-    const redis_cached_user_profile = await redis.get('user_profile');
-    if (redis_cached_user_profile) {
-      return res.json(JSON.parse(redis_cached_user_profile));
-    }
-    const user_profile = await prisma.user.findMany({
-      where: {
-        id: req.user.id,
-      },
+    console.log("REQ.USER:", req.user);
+
+    const user_profile = await prisma.user.findUnique({
+      where: { id: req.user.id },
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
+        profile_photo: true,
       },
     });
-    await redis.set('user_profile', JSON.stringify(user_profile), {
-      EX: 60,
-    });
+
+    if (!user_profile) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     res.status(200).json({
       success: true,
-      data: user_profile,
+      data: user_profile, // ✅ OBJECT, not array
     });
-  } catch (err) {
-    return res.status(401).json({
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
       success: false,
-      message: err.message,
+      message: "Server error",
     });
   }
 });

@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
+import ChangePassword from "../pages/ChangePassword";
 import ProtectedRoute from "../components/ProtectedRoute";
 import PublicRoute from "../components/PublicRoute";
 import Settings from "../pages/AppSettings";
@@ -21,6 +22,7 @@ export default function AppRoutes() {
       <Route path="/profile" element={ <ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+      <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
     </Routes>
   );
 }

@@ -1,12 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const { user, logout } = useAuth();
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const handleLogout = () => {
+    logout();
     navigate("/login", { replace: true });
   };
 
@@ -14,21 +15,25 @@ export default function Navbar() {
     <AppBar position="static" color="primary">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         
-        <Typography variant="h6" component="div">
-              <Button
-                component={Link}
-                to="/dashboard"
-                color="inherit"
-              >Admin Panel</Button>
+        {/* Logo / Title */}
+        <Typography variant="h6">
+          <Button
+            component={Link}
+            to="/dashboard"
+            color="inherit"
+          >
+            Admin Panel
+          </Button>
         </Typography>
 
+        {/* Right side */}
         <Box sx={{ display: "flex", gap: 2 }}>
-          {token && (
+          {user ? (
             <>
               <Button
                 variant="outlined"
                 color="inherit"
-                onClick={logout}
+                onClick={handleLogout}
               >
                 Logout
               </Button>
@@ -40,6 +45,7 @@ export default function Navbar() {
               >
                 Profile
               </Button>
+
               <Button
                 component={Link}
                 to="/settings"
@@ -48,36 +54,18 @@ export default function Navbar() {
                 Settings
               </Button>
             </>
+          ) : (
+            <Button
+              component={Link}
+              to="/login"
+              color="inherit"
+            >
+              Login
+            </Button>
           )}
         </Box>
 
       </Toolbar>
-    </AppBar> 
+    </AppBar>
   );
 }
-
-const styles = {
-  nav: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "12px 20px",
-    background: "#222",
-    color: "#fff",
-  },
-  logo: {
-    margin: 0,
-  },
-  links: {
-    display: "flex",
-    gap: "15px",
-    alignItems: "center",
-  },
-  logoutBtn: {
-    background: "red",
-    color: "white",
-    border: "none",
-    padding: "6px 12px",
-    cursor: "pointer",
-  },
-};

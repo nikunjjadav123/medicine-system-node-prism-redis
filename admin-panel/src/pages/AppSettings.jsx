@@ -2,11 +2,10 @@ import { Box, Switch, Typography, Paper } from "@mui/material";
 import { useThemeMode } from "../context/ThemeContext";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import LanguageIcon from "@mui/icons-material/Language";
 import DangerousIcon from "@mui/icons-material/Dangerous";
-
-
+import SuperAdminOnly from "../components/SuperAdminOnly";
+import { Link } from "react-router-dom";
 export default function AppSettings() {
   const { mode, toggleTheme } = useThemeMode();
 
@@ -53,74 +52,101 @@ export default function AppSettings() {
             gap: 1.5,
           }}
         >
-          <Typography>
+          <Typography
+            component={Link}
+            to="/change-password"
+            sx={{
+              color: mode === "dark"
+                ? "rgba(255, 255, 255, 0.87)"
+                : "rgba(0, 0, 0, 0.87)",
+              textDecoration: "none",
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            }}
+          >
             Change admin password
           </Typography>
 
-          <Typography>
+          <Typography
+            component={Link}
+            to="/forge-logut-all"
+            sx={{
+              color: mode === "dark"
+                ? "rgba(255, 255, 255, 0.87)"
+                : "rgba(0, 0, 0, 0.87)",
+              textDecoration: "none",
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            }}
+          >
             Force logout all sessions
-          </Typography>
-
-          <Typography>
-            IP allowlist / blocklist
-          </Typography>
+          </Typography>    
+         <SuperAdminOnly>
+            <Typography>
+              IP allowlist / blocklist
+            </Typography>
+         </SuperAdminOnly>  
         </Box>
       </Paper>
-      <Paper sx={{ p: 3, mt: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <LanguageIcon sx={{ mr: 1 }} />
-          <Typography variant="h5">
-            Language & Region Settings
-          </Typography>
-        </Box>
+      <SuperAdminOnly>
+          <Paper sx={{ p: 3, mt: 3 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <LanguageIcon sx={{ mr: 1 }} />
+              <Typography variant="h5">
+                Language & Region Settings
+              </Typography>
+            </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 1.5,
-          }}
-        >
-          <Typography>
-            Date format (DD/MM/YYYY, MM/DD/YYYY)
-          </Typography>
-          <Typography>
-            Time format (12h / 24h)
-          </Typography>
-          <Typography>
-            Timezone
-          </Typography>
-          <Typography>
-            Currency preference
-          </Typography>
-        </Box>
-      </Paper>
-      <Paper sx={{ p: 3, mt: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <DangerousIcon sx={{ mr: 1 }} />
-          <Typography variant="h5">
-            Danger Zone
-          </Typography>
-        </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 1.5,
+              }}
+            >
+              <Typography>
+                Date format (DD/MM/YYYY, MM/DD/YYYY)
+              </Typography>
+              <Typography>
+                Time format (12h / 24h)
+              </Typography>
+              <Typography>
+                Timezone
+              </Typography>
+              <Typography>
+                Currency preference
+              </Typography>
+            </Box>
+          </Paper>
+          <Paper sx={{ p: 3, mt: 3 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <DangerousIcon sx={{ mr: 1 }} />
+              <Typography variant="h5">
+                Danger Zone
+              </Typography>
+            </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 1.5,
-          }}
-        >
-          <Typography>
-            Delete all users
-          </Typography>
-          <Typography>
-            Clear database
-          </Typography>
-          <Typography>
-            Disable system access
-          </Typography>
-        </Box>
-      </Paper>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 1.5,
+              }}
+            >
+              <Typography>
+                Delete all users
+              </Typography>
+              <Typography>
+                Clear database
+              </Typography>
+              <Typography>
+                Disable system access
+              </Typography>
+            </Box>
+          </Paper>
+      </SuperAdminOnly>
     </Box>
   );
 }

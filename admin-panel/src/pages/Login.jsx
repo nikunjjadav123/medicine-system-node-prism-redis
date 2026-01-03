@@ -1,7 +1,7 @@
 import api from "../services/api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
+import {
   Alert,
   Container,
   TextField,
@@ -9,79 +9,88 @@ import {
   Typography,
   Box,
   Paper,
-  CardContent
+  CardContent,
 } from "@mui/material";
+import { useAuth } from "../context/AuthContext";
+import VaccinesIcon from "@mui/icons-material/Vaccines";
 
-export default function login() {
-    const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+export default function Login() {
+  const { login } = useAuth(); // ✅ context login
+  const navigate = useNavigate();
 
-    const login = async(e) =>{
-        e.preventDefault();
-        setError("");
-        setLoading(true);
-        try{
-            const res = await api.post("/api/login",{email,password});
-            localStorage.setItem("token",res.data.token);
-            navigate("/dashboard");
-        }catch (err) {
-            if (err.response?.status === 429) {
-                setError("Too many login attempts. Please try again after a few minutes.");
-            } else {
-                setError(
-                err.response?.data?.message || "Something went wrong"
-                );
-            }
-            }finally {
-                setLoading(false);
-            }
-        };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    return (
-        <Container maxWidth="sm">
-            <Paper elevation={3} sx={{ mt: 10, p: 4 }}>
-                <Typography variant="h5" align="center" gutterBottom>
-                    Medical Admin Login
-                </Typography>
-                {error && (
-                    <CardContent>
-                        <Alert severity="error">
-                            <Typography variant="body2">
-                                {error}
-                            </Typography>
-                        </Alert>
-                    </CardContent>
-                )}
-                 <Box component="form">
-                    <TextField
-                        fullWidth
-                        label="Email"
-                        margin="normal"
-                        type="email"
-                        onChange={e => setEmail(e.target.value)}
-                    />
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-                    <TextField
-                        fullWidth
-                        label="Password"
-                        margin="normal"
-                        type="password"
-                        onChange={e => setPassword(e.target.value)}
-                    />
+    try {
+      const res = await api.post("/api/login", { email, password });
 
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 2 }}
-                        onClick={login}
-                    >
-                        Login
-                    </Button>
-                </Box>
-            </Paper>
-        </Container>
-    );
+      login(res.data.token); // 🔥 updates AuthContext immediately
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      if (err.response?.status === 429) {
+        setError("Too many login attempts. Please try again later.");
+      } else {
+        setError(err.response?.data?.message || "Invalid credentials");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Container maxWidth="sm">
+      <Paper elevation={3} sx={{ mt: 10, p: 4 }}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <VaccinesIcon sx={{ mr: 1 }} />
+          <Typography variant="h5" align="center" gutterBottom>
+            Medical Admin Login
+          </Typography>
+        </Box>
+        {error && (
+          <CardContent>
+            <Alert severity="error">{error}</Alert>
+          </CardContent>
+        )}
+
+        <Box component="form" onSubmit={handleLogin}>
+          <TextField
+            fullWidth
+            label="Email"
+            margin="normal"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <TextField
+            fullWidth
+            label="Password"
+            margin="normal"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2 }}
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
+  );
 }

@@ -6,7 +6,8 @@ const {
   profile,
   logout,
   updateProfile,
-  changePassword
+  changePassword,
+  allDevicesLogout
 } = require('../controllers/auth.controller');
 const loginSchema = require("../validators/auth.schema");
 const validate = require("../middleware/validate");
@@ -21,5 +22,6 @@ userRoute.post('/logout', auth, logout);
 
 userRoute.put("/edit-profile",auth,upload.single("profile_photo"),updateProfile);
 userRoute.put("/change-password",auth,changePassword);
+userRoute.post("/force-logout-me",auth,allDevicesLogout);
 
 module.exports = userRoute;

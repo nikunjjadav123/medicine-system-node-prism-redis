@@ -77,7 +77,8 @@ const login = catchAsync(async (req, res) => {
     {
       id: user.id,
       email: user.email,
-      role: user.role
+      role: user.role,
+      tokenVersion: user?.tokenVersion
     },
     process.env.JWT_SECRET_KEY,
     { expiresIn: process.env.JWT_EXPIRE },
@@ -212,5 +213,36 @@ const changePassword = catchAsync(async (req, res) => {
     message: "Password changed successfully",
   });
 });
+const allDevicesLogout = catchAsync(async (req, res) => {
+  const userId = req.user.id;
 
-module.exports = { register, login, profile, logout, updateProfile, changePassword };
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      tokenVersion: { increment: 1 }, // 👈 Prisma way
+    },
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out from all devices successfully",
+  });
+});
+
+
+module.exports = { register,
+  login,
+  profile,
+  logout,
+  updateProfile,
+  changePassword,
+  allDevicesLogout 
+};

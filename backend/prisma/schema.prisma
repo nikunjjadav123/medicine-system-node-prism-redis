@@ -35,5 +35,6 @@ model User {
   profile_photo String?
   isActive Boolean  @default(true)
   role      Role     @default(DOCTOR)
+  tokenVersion Int @default(0)
   createdAt DateTime @default(now())
 }

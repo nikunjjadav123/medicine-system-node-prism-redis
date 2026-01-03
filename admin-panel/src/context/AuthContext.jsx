@@ -1,11 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-
+import api from "../services/api";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
   // On page reload
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -30,10 +29,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+  try {
+    await api.post("/api/logout");
+  } catch (error) {
+    // 401 / already logged out / token expired → OK
+    console.warn("Backend logout skipped:", error.response?.status);
+  } finally {
     localStorage.removeItem("token");
     setUser(null);
-  };
+  }
+};
+
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

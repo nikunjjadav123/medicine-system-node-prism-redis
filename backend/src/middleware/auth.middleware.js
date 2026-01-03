@@ -26,7 +26,7 @@ const auth = async (req, res, next) => {
       where: { id: decoded.id },
     });
 
-    if (decoded.tokenVersion !== user.tokenVersion) {
+    if (req.path !== "/api/force-logout-me" && decoded.tokenVersion !== user.tokenVersion) {
       return res.status(401).json({ message: "Session expired so please login again" });
     }
 

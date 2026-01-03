@@ -5,7 +5,8 @@ const {
   login,
   profile,
   logout,
-  updateProfile
+  updateProfile,
+  changePassword
 } = require('../controllers/auth.controller');
 const loginSchema = require("../validators/auth.schema");
 const validate = require("../middleware/validate");
@@ -19,6 +20,6 @@ userRoute.get('/profile',auth, profile);
 userRoute.post('/logout', auth, logout);
 
 userRoute.put("/edit-profile",auth,upload.single("profile_photo"),updateProfile);
-
+userRoute.put("/change-password",auth,changePassword);
 
 module.exports = userRoute;

@@ -182,5 +182,35 @@ const logout = catchAsync(async (req, res) => {
     });
   }
 });
+const changePassword = catchAsync(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const userId = req.user.id;
 
-module.exports = { register, login, profile, logout, updateProfile };
+  if (!oldPassword || !newPassword) {
+    throw new AppError("Both old and new passwords are required",404);
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    throw new AppError("Old password is incorrect",401);
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { password: hashedPassword },
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Password changed successfully",
+  });
+});
+
+module.exports = { register, login, profile, logout, updateProfile, changePassword };
